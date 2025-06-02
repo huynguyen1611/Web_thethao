@@ -1,58 +1,55 @@
 @extends('admin.main')
 @section('content')
-<form action="{{ route('admin.product.update') }}" enctype="multipart/form-data" method="post">
-    @csrf
-    <div class="admin-content-main-content">
-        <div class="admin-content-main-content-left">
-            <div class="admin-content-main-content-tow-input">
-                <input type="hidden" name="id" value="{{ $product->id }}">
-                <input type="text" value="{{ $product -> name}}" name="name" placeholder="Tên sản phẩm" />
-                <input type="text" value="{{ $product -> material }}" name="material" placeholder="Chất liệu" />
-            </div>
-            <div class="admin-content-main-content-tow-input">
-                <input type="text" value="{{ $product -> price_nomal }}" name="price_nomal" placeholder="Giá bán" />
-                <input type="text" value="{{ $product -> price_sale }}" name="price_sale" placeholder="Giá giảm" />
-            </div>
-            <textarea class="editor" name="description">{{ html_entity_decode($product->description) }}</textarea>
-        <textarea class="editor1" name="content">{{ html_entity_decode($product->content) }}</textarea>
+    <form action="{{ route('admin.product.update') }}" enctype="multipart/form-data" method="post">
+        @csrf
+        <div class="admin-content-main-content">
+            <div class="admin-content-main-content-left">
+                <div class="admin-content-main-content-tow-input">
+                    <input type="hidden" name="id" value="{{ $product->id }}">
+                    <input type="text" value="{{ $product->name }}" name="name" placeholder="Tên sản phẩm" />
+                    <input type="text" value="{{ $product->material }}" name="material" placeholder="Chất liệu" />
+                </div>
+                <div class="admin-content-main-content-tow-input">
+                    <input type="text" value="{{ $product->price_nomal }}" name="price_nomal" placeholder="Giá bán" />
+                    <input type="text" value="{{ $product->price_sale }}" name="price_sale" placeholder="Giá giảm" />
+                </div>
+                <textarea class="editor" name="description">{{ html_entity_decode($product->description) }}</textarea>
+                <textarea class="editor1" name="content">{{ html_entity_decode($product->content) }}</textarea>
 
-            <button type="submit" class="main-btn">Cập nhật sản phẩm</button>
-        </div>
+                <button type="submit" class="main-btn">Cập nhật sản phẩm</button>
+            </div>
 
-        <div class="admin-content-main-content-right">
-            <div class="admin-content-main-content-right-img">
-                <label for="image">Ảnh đại diện</label>
-                <input id="image" type="file" name="image" value="{{ $product->image }}"/>
-                <div class="image-show" id="input-file-img">
-                    <img src="{{ asset($product->image) }}" alt="">
+            <div class="admin-content-main-content-right">
+                <div class="admin-content-main-content-right-img">
+                    <label for="image">Ảnh đại diện</label>
+                    <input id="image" type="file" name="image" value="{{ $product->image }}" />
+                    <div class="image-show" id="input-file-img">
+                        <img src="{{ asset($product->image) }}" alt="">
+                    </div>
+                </div>
+                <div class="admin-content-main-content-right-imgs">
+                    <label for="images">Ảnh sản phẩm</label>
+                    <input id="images" type="file" name="images[]" multiple />
+                    <div class="images-show" id="input-file-imgs">
+                        @php
+                            $product_images = explode('*', $product->images); // Chuyển chuỗi thành mảng
+                        @endphp
+                        @foreach ($product_images as $product_image)
+                            <!-- Sửa lại biến lặp là $product_images -->
+                            <img src="{{ asset($product_image) }}" alt="">
+                        @endforeach
+                    </div>
+
                 </div>
             </div>
-            <div class="admin-content-main-content-right-imgs">
-                <label for="images">Ảnh sản phẩm</label>
-                <input id="images" type="file" name="images[]" multiple />
-                <div class="images-show" id="input-file-imgs">
-                    @php
-                        $product_images = explode('*', $product->images); // Chuyển chuỗi thành mảng
-                    @endphp
-                    @foreach ($product_images as $product_image) <!-- Sửa lại biến lặp là $product_images -->
-                        <img src="{{ asset($product_image) }}" alt="">
-                    @endforeach
-                </div>
-
-            </div>
         </div>
-    </div>
-</form>
-
+    </form>
 @endsection
 @section('footer')
-    <script src="{{asset('backend/asset/ckeditor/main.js')}}"></script>
-    <script
-      src="https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.umd.js"
-      crossorigin
-    ></script>
+    <script src="{{ asset('backend/asset/ckeditor/main.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.umd.js" crossorigin></script>
     <script>
-            const {
+        const {
             ClassicEditor,
             Autoformat,
             AutoImage,
@@ -172,8 +169,7 @@
                 Underline,
             ],
             heading: {
-                options: [
-                    {
+                options: [{
                         model: "paragraph",
                         title: "Paragraph",
                         class: "ck-heading_paragraph",
@@ -217,14 +213,12 @@
                 ],
             },
             htmlSupport: {
-                allow: [
-                    {
-                        name: /^.*$/,
-                        styles: true,
-                        attributes: true,
-                        classes: true,
-                    },
-                ],
+                allow: [{
+                    name: /^.*$/,
+                    styles: true,
+                    attributes: true,
+                    classes: true,
+                }, ],
             },
             image: {
                 toolbar: [
@@ -261,18 +255,15 @@
                 },
             },
             mention: {
-                feeds: [
-                    {
-                        marker: "@",
-                        feed: [
-                            /* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-                        ],
-                    },
-                ],
+                feeds: [{
+                    marker: "@",
+                    feed: [
+                        /* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
+                    ],
+                }, ],
             },
             style: {
-                definitions: [
-                    {
+                definitions: [{
                         name: "Article category",
                         element: "h3",
                         classes: ["category"],
@@ -338,8 +329,6 @@
 
         ClassicEditor.create(document.querySelector(".editor"), editorConfig1);
         ClassicEditor.create(document.querySelector(".editor1"), editorConfig2);
-
-
     </script>
-    <script src="{{asset('backend/asset/js/product_ajax.js')}}"></script>
+    <script src="{{ asset('backend/asset/js/product_ajax.js') }}"></script>
 @endsection
